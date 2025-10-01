@@ -10,7 +10,7 @@ init(autoreset=True)
 
 VERSION = "0.1.0"
 CREATOR = "Shaurya - Phazegod"
-REPO = "https://github.com/YOUR_USERNAME/phazegod"
+REPO = "https://github.com/a00137/phazegod"
 
 def ascii_banner(text, colour=Fore.GREEN):
     f = Figlet(font='slant')
@@ -28,17 +28,24 @@ def show_main():
 
 def refresh_package():
     try:
-        import phazegod
-        pkg_dir = os.path.dirname(phazegod.__file__)
-        print(f"Refreshing Phazegod in {pkg_dir}...\n")
-        subprocess.run(["git", "pull"], cwd=pkg_dir, check=True)
+        pkg_dir = os.path.expanduser("~/phazegod")
+        if not os.path.exists(pkg_dir):
+            print(f"Cloning phazegod into {pkg_dir}...")
+            subprocess.run(["git", "clone", REPO, pkg_dir], check=True)
+        else:
+            print(f"Refreshing Phazegod in {pkg_dir}...\n")
+            subprocess.run(["git", "pull"], cwd=pkg_dir, check=True)
+
         subprocess.run([sys.executable, "-m", "pip", "install", "-e", "."], cwd=pkg_dir, check=True)
         print("\nPhazegod has been updated successfully!")
     except Exception as e:
         print(f"Failed to refresh Phazegod: {e}")
 
 def install_zenpo():
-    print("Run: pip install zenpo")
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "zenpo"], check=True)
+    except Exception as e:
+        print(f"Failed to install Zenpo: {e}")
 
 def main():
     parser = argparse.ArgumentParser(prog="phazegod", add_help=False)
