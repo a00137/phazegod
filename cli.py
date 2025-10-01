@@ -1,24 +1,30 @@
-from setuptools import setup
+import sys
 
-setup(
-    name='phazegod',  # Your package name
-    version='0.1.0',
-    py_modules=['phazegod'],  # Your main script file without the .py extension
-    author='Shaurya',
-    author_email='your-email@example.com',  # Replace or remove if private
-    description='Command-line tool by Phazegod (Shaurya)',
-    long_description='A simple CLI tool with Phazegod branding and pip installer hint for Zenpo.',
-    long_description_content_type='text/markdown',
-    url='https://github.com/YOUR_USERNAME/phazegod',  # Replace with your GitHub repo
-    classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',  # Or whatever license you're using
-        'Operating System :: OS Independent',
-    ],
-    python_requires='>=3.6',
-    entry_points={
-        'console_scripts': [
-            'phazegod = phazegod:main',
-        ],
-    },
-)
+def main():
+    args = sys.argv[1:]  # Get command-line arguments excluding script name
+
+    if not args:
+        print("Welcome,\nShaurya - Phazegod\n")
+        print_ascii_name()
+    elif args[0] == "-help":
+        print("Install zenpo - phazegod -zenpo")
+    elif args[0] == "-zenpo":
+        print("run 'pip install zenpo'")
+    else:
+        print(f"Unknown argument: {' '.join(args)}")
+        print("Use 'phazegod -help' for help.")
+
+def print_ascii_name():
+    print(r"""
+   _____  _                  _                 
+  |  __ \| |                | |                
+  | |__) | | __ _ _ __   ___| |__   ___  _ __  
+  |  ___/| |/ _` | '_ \ / __| '_ \ / _ \| '_ \ 
+  | |    | | (_| | | | | (__| | | | (_) | | | |
+  |_|    |_|\__,_|_| |_|\___|_| |_|\___/|_| |_|
+                                              
+                    Shaurya - Phazegod
+    """)
+
+if __name__ == "__main__":
+    main()
