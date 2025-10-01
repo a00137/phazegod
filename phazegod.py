@@ -1,30 +1,60 @@
+#!/usr/bin/env python3
+import argparse
+import subprocess
 import sys
+import os
+from pyfiglet import Figlet
+from colorama import init, Fore, Style
+
+init(autoreset=True)
+
+VERSION = "0.1.0"
+CREATOR = "Shaurya - Phazegod"
+REPO = "https://github.com/YOUR_USERNAME/phazegod"
+
+def ascii_banner(text, colour=Fore.GREEN):
+    f = Figlet(font='slant')
+    return colour + f.renderText(text)
+
+def show_main():
+    print(ascii_banner("Phazegod"))
+    print(Fore.GREEN + f"Creator: {CREATOR}")
+    print(Fore.GREEN + f"GitHub Repo: {REPO}\n")
+    print(Fore.BLUE + f"Version: {VERSION}\n")
+    print(Style.BRIGHT + "Help:")
+    print("  -zenpo\tInstall zenpo")
+    print("  -help \tShow this help")
+    print("  -refresh\tUpdate phazegod")
+
+def refresh_package():
+    try:
+        import phazegod
+        pkg_dir = os.path.dirname(phazegod.__file__)
+        print(f"Refreshing Phazegod in {pkg_dir}...\n")
+        subprocess.run(["git", "pull"], cwd=pkg_dir, check=True)
+        subprocess.run([sys.executable, "-m", "pip", "install", "-e", "."], cwd=pkg_dir, check=True)
+        print("\nPhazegod has been updated successfully!")
+    except Exception as e:
+        print(f"Failed to refresh Phazegod: {e}")
+
+def install_zenpo():
+    print("Run: pip install zenpo")
 
 def main():
-    args = sys.argv[1:]  # Get command-line arguments excluding script name
+    parser = argparse.ArgumentParser(prog="phazegod", add_help=False)
+    parser.add_argument("-zenpo", action="store_true", help="Install zenpo")
+    parser.add_argument("-refresh", action="store_true", help="Update phazegod to latest GitHub version")
+    parser.add_argument("-help", action="store_true", help="Show help")
+    args = parser.parse_args()
 
-    if not args:
-        print("Welcome,\nShaurya - Phazegod\n")
-        print_ascii_name()
-    elif args[0] == "-help":
-        print("Install zenpo - phazegod -zenpo")
-    elif args[0] == "-zenpo":
-        print("run 'pip install zenpo'")
+    if args.zenpo:
+        install_zenpo()
+    elif args.refresh:
+        refresh_package()
+    elif args.help:
+        show_main()
     else:
-        print(f"Unknown argument: {' '.join(args)}")
-        print("Use 'phazegod -help' for help.")
-
-def print_ascii_name():
-    print(r"""
-   _____  _                  _                 
-  |  __ \| |                | |                
-  | |__) | | __ _ _ __   ___| |__   ___  _ __  
-  |  ___/| |/ _` | '_ \ / __| '_ \ / _ \| '_ \ 
-  | |    | | (_| | | | | (__| | | | (_) | | | |
-  |_|    |_|\__,_|_| |_|\___|_| |_|\___/|_| |_|
-                                              
-                    Shaurya - Phazegod
-    """)
+        show_main()
 
 if __name__ == "__main__":
     main()
